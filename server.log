@@ -1,0 +1,22 @@
+js-bson: Failed to load c++ bson extension, using pure JS version
+/Users/sambehrens/htdocs/node_modules/mongodb/lib/mongodb/connection/base.js:246
+        throw message;      
+        ^
+
+MongoError: Authentication failed.
+    at Object.toError (/Users/sambehrens/htdocs/node_modules/mongodb/lib/mongodb/utils.js:114:11)
+    at /Users/sambehrens/htdocs/node_modules/mongodb/lib/mongodb/db.js:1196:31
+    at /Users/sambehrens/htdocs/node_modules/mongodb/lib/mongodb/db.js:1905:9
+    at Server.Base._callHandler (/Users/sambehrens/htdocs/node_modules/mongodb/lib/mongodb/connection/base.js:453:41)
+    at /Users/sambehrens/htdocs/node_modules/mongodb/lib/mongodb/connection/server.js:488:18
+    at MongoReply.parseBody (/Users/sambehrens/htdocs/node_modules/mongodb/lib/mongodb/responses/mongo_reply.js:68:5)
+    at null.<anonymous> (/Users/sambehrens/htdocs/node_modules/mongodb/lib/mongodb/connection/server.js:446:20)
+    at emitOne (events.js:77:13)
+    at emit (events.js:169:7)
+    at null.<anonymous> (/Users/sambehrens/htdocs/node_modules/mongodb/lib/mongodb/connection/connection_pool.js:207:13)
+    at emitTwo (events.js:87:13)
+    at emit (events.js:172:7)
+    at Socket.<anonymous> (/Users/sambehrens/htdocs/node_modules/mongodb/lib/mongodb/connection/connection.js:440:22)
+    at emitOne (events.js:77:13)
+    at Socket.emit (events.js:169:7)
+    at readableAddChunk (_stream_readable.js:146:16)
