@@ -15,6 +15,20 @@ var bodyParser   = require('body-parser');
 var session      = require('express-session');
 
 var configDB = require('./config/database.js');
+var net = require('net');
+
+
+var server = net.createServer(function(connection) { 
+   console.log('client connected');
+   connection.on('end', function() {
+      console.log('client disconnected');
+   });
+   connection.write('Hello World!\r\n');
+   connection.pipe(connection);
+});
+server.listen(6000, function() { 
+  console.log('server is listening');
+});
 
 
 // configuration ===============================================================
