@@ -7,6 +7,8 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 
 var TwitterStrategy  = require('passport-twitter').Strategy;
 
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+
 // load up the user model
 var User            = require('../app/models/user');
 
@@ -70,7 +72,7 @@ module.exports = function(passport) {
                 if (user) {
                     console.log('found user');
                    // return done(null, user); // user found, return that user
-                } else {
+               } else {
                     // if there is no user found with that facebook id, create them
                    // var newUser            = new User();
                    console.log('found profile id'+ profile.id);
@@ -89,12 +91,12 @@ module.exports = function(passport) {
                     //     // if successful, return the new user
                     //     return done(null, newUser);
                     //});
-                }
+}
 
-            });
-        });
+});
+});
 
-    }));
+}));
 
         // =========================================================================
     // TWITTER =================================================================
@@ -110,9 +112,9 @@ module.exports = function(passport) {
 
         // make the code asynchronous
     // User.findOne won't fire until we have all our data back from Twitter
-        process.nextTick(function() {
+    process.nextTick(function() {
 
-            User.findOne({ 'twitter.id' : profile.id }, function(err, user) {
+        User.findOne({ 'twitter.id' : profile.id }, function(err, user) {
 
                 // if there is an error, stop everything and return that
                 // ie an error connecting to the database
@@ -141,9 +143,53 @@ module.exports = function(passport) {
                 }
             });
 
-    });
+});
 
-    }));
+}));
+
+passport.use(new GoogleStrategy({
+
+    clientID        : configAuth.googleAuth.clientID,
+    clientSecret    : configAuth.googleAuth.clientSecret,
+    callbackURL     : configAuth.googleAuth.callbackURL,
+
+},
+function(token, refreshToken, profile, done) {
+
+        // make the code asynchronous
+        // User.findOne won't fire until we have all our data back from Google
+        process.nextTick(function() {
+
+            // try to find the user based on their google id
+            User.findOne({ 'google.id' : profile.id }, function(err, user) {
+                if (err)
+                    return done(err);
+
+                if (user) {
+
+                    // if a user is found, log them in
+                    return done(null, user);
+                } else {
+                    // if the user isnt in our database, create a new user
+                    var newUser          = new User();
+
+                    // set all of the relevant information
+                    newUser.google.id    = profile.id;
+                    newUser.google.token = token;
+                    newUser.google.name  = profile.displayName;
+                    newUser.google.email = profile.emails[0].value; // pull the first email
+
+                    // save the user
+                    newUser.save(function(err) {
+                        if (err)
+                            throw err;
+                        return done(null, newUser);
+                    });
+                }
+            });
+        });
+
+}));
 
     // =========================================================================
     // LOCAL LOGIN =============================================================
@@ -230,8 +276,8 @@ module.exports = function(passport) {
 
         });    
 
-        });
+    });
 
-    }));
+}));
 
 };
