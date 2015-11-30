@@ -34,6 +34,11 @@ server.listen(6000, function() {
 // configuration ===============================================================
 
  	mongoose.connect(configDB.url); // connect to our database
+ 	console.log(mongoose.connection.readyState);
+ 	var db = mongoose.connection;
+	db.once('open', function () {
+		console.log('MongoDB connection successful.');
+	});
 
 
 
