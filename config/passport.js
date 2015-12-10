@@ -5,6 +5,7 @@ var TwitterStrategy  = require('passport-twitter').Strategy;
 var GoogleStrategy   = require('passport-google-oauth').OAuth2Strategy;
 var InstagramStrategy  = require('passport-instagram').Strategy;
 
+
 // load up the user model
 var User       = require('../app/models/user');
 
@@ -130,7 +131,7 @@ module.exports = function(passport) {
         clientID        : configAuth.facebookAuth.clientID,
         clientSecret    : configAuth.facebookAuth.clientSecret,
         callbackURL     : configAuth.facebookAuth.callbackURL,
-        //have to add mutual friends
+        profileFields: ['id', 'emails', 'name', 'likes', 'posts', 'music', 'movies', 'photos', 'books'],
         passReqToCallback : true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
 
     },
@@ -154,7 +155,7 @@ module.exports = function(passport) {
                             user.facebook.token = token;
                             user.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
                             user.facebook.email = profile.emails[0].value;
-                            user.facebook.user_hometown = profile.user_hometown;
+                            user.facebook.user_hometown = profile._json.hometown.name;
                         
                             user.save(function(err) {
                                 if (err)
@@ -171,8 +172,7 @@ module.exports = function(passport) {
                         newUser.facebook.token = token;
                         newUser.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
                         newUser.facebook.email = profile.emails[0].value;
-                        newUser.facebook.user_hometown = profile.user_hometown;
-
+                        newUser.facebook.user_hometown = profile._json.hometown.name;
                         newUser.save(function(err) {
                             if (err)
                                 throw err;
@@ -188,8 +188,7 @@ module.exports = function(passport) {
                 user.facebook.token = token;
                 user.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
                 user.facebook.email = profile.emails[0].value;
-                user.facebook.user_hometown = profile.user_hometown;
-
+                user.facebook.user_hometown = profile._json.hometown.name;
                 user.save(function(err) {
                     if (err)
                         throw err;
