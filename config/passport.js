@@ -130,6 +130,7 @@ module.exports = function(passport) {
         clientID        : configAuth.facebookAuth.clientID,
         clientSecret    : configAuth.facebookAuth.clientSecret,
         callbackURL     : configAuth.facebookAuth.callbackURL,
+        //have to add mutual friends
         passReqToCallback : true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
 
     },
@@ -137,6 +138,7 @@ module.exports = function(passport) {
 
         // asynchronous
         process.nextTick(function() {
+            console.log(profile)
 
             // check if the user is already logged in
             if (!req.user) {
@@ -152,7 +154,8 @@ module.exports = function(passport) {
                             user.facebook.token = token;
                             user.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
                             user.facebook.email = profile.emails[0].value;
-
+                            user.facebook.user_hometown = profile.user_hometown;
+                        
                             user.save(function(err) {
                                 if (err)
                                     throw err;
@@ -164,11 +167,11 @@ module.exports = function(passport) {
                     } else {
                         // if there is no user, create them
                         var newUser            = new User();
-
                         newUser.facebook.id    = profile.id;
                         newUser.facebook.token = token;
                         newUser.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
                         newUser.facebook.email = profile.emails[0].value;
+                        newUser.facebook.user_hometown = profile.user_hometown;
 
                         newUser.save(function(err) {
                             if (err)
@@ -181,11 +184,11 @@ module.exports = function(passport) {
             } else {
                 // user already exists and is logged in, we have to link accounts
                 var user            = req.user; // pull the user out of the session
-
                 user.facebook.id    = profile.id;
                 user.facebook.token = token;
                 user.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
                 user.facebook.email = profile.emails[0].value;
+                user.facebook.user_hometown = profile.user_hometown;
 
                 user.save(function(err) {
                     if (err)
@@ -301,7 +304,8 @@ module.exports = function(passport) {
                         if (!user.instagram.token) {
                             user.instagram.token = token;
                             user.instagram.name  = profile.displayName;
-                            
+                            user.instagram.id = profile.id
+
 
                             user.save(function(err) {
                                 if (err)
@@ -330,10 +334,9 @@ module.exports = function(passport) {
                 // user already exists and is logged in, we have to link accounts
                 var user               = req.user; // pull the user out of the session
 
-                user.google.id    = profile.id;
-                user.google.token = token;
-                user.google.name  = profile.displayName;
-                user.google.email = profile.emails[0].value; // pull the first email
+                user.instagram.id    = profile.id;
+                user.instagram.token = token;
+                user.instagram.name  = profile.displayName;
 
                 user.save(function(err) {
                     if (err)

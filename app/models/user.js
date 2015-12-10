@@ -14,7 +14,7 @@ var userSchema = mongoose.Schema({
         id           : String,
         token        : String,
         email        : String,
-        name         : String
+        user_hometown : String
     },
     twitter          : {
         id           : String,
@@ -31,7 +31,9 @@ var userSchema = mongoose.Schema({
     instagram        : {
         id           : String,
         token        : String, 
-        name         : String
+        displayName  : String,
+        name         : String,
+        username     : String 
     }
 
 });
