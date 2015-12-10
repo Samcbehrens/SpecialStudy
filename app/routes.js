@@ -14,11 +14,41 @@ module.exports = function(app, passport) {
         });
     });
 
+    // DIFFRENT PROFILES =========================
+
+    app.get('/artist', function(req,res){
+        res.render('artistProfile.ejs');
+    });
+
+    app.get('/participant', function(req,res){
+        res.render('participantProfile', {
+            user: req.user
+        });
+    });
+
     // LOGOUT ==============================
     app.get('/logout', function(req, res) {
         req.logout();
         res.redirect('/');
     });
+
+    // Terms and Privacy statement Routes===============
+
+    app.get('/terms/terms', function(req, res){
+        res.render('terms.ejs');
+    });
+
+       app.get('/terms/about', function(req, res){
+        res.render('about.ejs');
+     });
+
+       app.get('/terms/privacy', function(req, res){
+        res.render('privacy.ejs');
+   });
+
+       app.get('/terms/support', function(req, res){
+        res.render('support.ejs');
+     });
 
 // =============================================================================
 // AUTHENTICATE (FIRST LOGIN) ==================================================
@@ -86,6 +116,21 @@ module.exports = function(app, passport) {
             passport.authenticate('google', {
                 successRedirect : '/profile',
                 failureRedirect : '/'
+            }));
+
+    // instagram ------------------------------
+
+        //send to instagram to do authentication 
+
+        app.get('/auth/instagram', passport.authenticate('instagram'), function(req, res){
+        });
+
+        //callback after instagram has authenticated the user 
+
+        app.get('/auth/instagram/callback',
+            passport.authenticate('instagram', {
+                successRedirect: 'profile',
+                failureRedirect: '/'
             }));
 
 // =============================================================================
