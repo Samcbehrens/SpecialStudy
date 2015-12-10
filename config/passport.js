@@ -301,7 +301,7 @@ module.exports = function(passport) {
                         if (!user.instagram.token) {
                             user.instagram.token = token;
                             user.instagram.name  = profile.displayName;
-                            user.instagram.email = profile.emails[0].value; // pull the first email
+                            
 
                             user.save(function(err) {
                                 if (err)
@@ -317,7 +317,6 @@ module.exports = function(passport) {
                         newUser.instagram.id    = profile.id;
                         newUser.instagram.token = token;
                         newUser.instagram.name  = profile.displayName;
-                        newUser.instagram.email = profile.emails[0].value; // pull the first email
 
                         newUser.save(function(err) {
                             if (err)
