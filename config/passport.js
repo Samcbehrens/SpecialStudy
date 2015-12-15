@@ -328,33 +328,23 @@ module.exports = function(passport) {
 
     },
     function(req, token, tokenSecret, profile, done) {
-        console.log(profile)
+        //console.log(profile)
         // asynchronous
+
+
         process.nextTick(function() {
-     
+
+            var T = new Twit({
+                consumer_key:         configAuth.twitterAuth.consumerKey
+                , consumer_secret:      configAuth.twitterAuth.consumerSecret
+                , access_token:         token
+                , access_token_secret:  tokenSecret
+                });
+
             // check if the user is already logged in
             if (!req.user) {
 
                 User.findOne({ 'twitter.id' : profile.id }, function(err, user) {
-                    var T = new Twit({
-                            consumer_key:         configAuth.twitterAuth.consumerKey
-                          , consumer_secret:      configAuth.twitterAuth.consumerSecret
-                          , access_token:         token
-                          , access_token_secret:  tokenSecret
-                        });
-
-                    // T.get('followers/ids', function(err, data, response) {
-                    //     console.log('test',data)
-                    //     console.log(data.ids[0])
-                    //     T.get('users/lookup?user_id='+data.ids[0],function(err, data, response){
-                    //         console.log(data)
-                    //     })
-                    // }) 
-
-
-                   T.get('statuses/user_timeline', function(err, data, response) {
-                        console.log('test',data)
-                    })  
 
                     if (err)
                         return done(err);
@@ -365,6 +355,43 @@ module.exports = function(passport) {
                             user.twitter.token       = token;
                             user.twitter.username    = profile.username;
                             user.twitter.displayName = profile.displayName;
+
+                             T.get('statuses/user_timeline', function(err, data, response) {
+                                data.forEach(function (element, index) {
+                                    user.twitter.tweets.push(element.status.text);
+                                    console.log(element.status.text)
+                                });
+                             })  
+
+                             T.get('favorites/list', function(err, data, response) {
+                               
+                                data.forEach(function (element, index) {
+                                console.log('element', element.text)
+                                user.twitter.likes.text = element.text;
+                                user.twitter.likes.user = element.user.name;
+                                 });
+                             })  
+
+                            T.get('followers/ids', function(err, data, response) {
+                                ids = data.ids
+                                ids.forEach(function (element, index) {
+                                T.get('users/lookup', { user_id: element }, function(err, data, response) {
+                                    user.twitter.followers.name = data[0].name
+                                    user.twitter.followers.username = data[0].screen_name
+                                    }) 
+                                });
+                            }) 
+
+
+                            T.get('friends/ids', function(err, data, response) {
+                                ids = data.ids
+                                ids.forEach(function (element, index) {
+                                T.get('users/lookup', { user_id: element }, function(err, data, response) {
+                                    user.twitter.friends.name = data[0].name
+                                    user.twitter.friends.username = data[0].screen_name
+                                    }) 
+                                });
+                            }) 
 
                             user.save(function(err) {
                                 if (err)
@@ -377,11 +404,43 @@ module.exports = function(passport) {
                     } else {
                         // if there is no user, create them
                         var newUser                 = new User();
+                        
+                             T.get('statuses/user_timeline', function(err, data, response) {
+                                data.forEach(function (element, index) {
+                                    newUser.twitter.tweets.push(element.status.text);
+                                    console.log(element.status.text)
+                                });
+                             })  
 
-                        newUser.twitter.id          = profile.id;
-                        newUser.twitter.token       = token;
-                        newUser.twitter.username    = profile.username;
-                        newUser.twitter.displayName = profile.displayName;
+                             T.get('favorites/list', function(err, data, response) {
+                               
+                                data.forEach(function (element, index) {
+                                console.log('element', element.text)
+                                newUser.twitter.likes.text = element.text;
+                                newUser.twitter.likes.user = element.user.name;
+                                 });
+                             })  
+
+                            T.get('followers/ids', function(err, data, response) {
+                                ids = data.ids
+                                ids.forEach(function (element, index) {
+                                T.get('users/lookup', { user_id: element }, function(err, data, response) {
+                                    newUser.twitter.followers.name = data[0].name
+                                    newUser.twitter.followers.username = data[0].screen_name
+                                    }) 
+                                });
+                            }) 
+
+
+                            T.get('friends/ids', function(err, data, response) {
+                                ids = data.ids
+                                ids.forEach(function (element, index) {
+                                T.get('users/lookup', { user_id: element }, function(err, data, response) {
+                                    newUser.twitter.friends.name = data[0].name
+                                    newUser.twitter.friends.username = data[0].screen_name
+                                    }) 
+                                });
+                            }) 
 
                         newUser.save(function(err) {
                             if (err)
@@ -399,6 +458,44 @@ module.exports = function(passport) {
                 user.twitter.token       = token;
                 user.twitter.username    = profile.username;
                 user.twitter.displayName = profile.displayName;
+
+
+                 T.get('statuses/user_timeline', function(err, data, response) {
+                    data.forEach(function (element, index) {
+                        user.twitter.tweets.push(element.status.text);
+                        console.log(element.status.text)
+                    });
+                 })  
+
+                 T.get('favorites/list', function(err, data, response) {
+                   
+                    data.forEach(function (element, index) {
+                    console.log('element', element.text)
+                    user.twitter.likes.text = element.text;
+                    user.twitter.likes.user = element.user.name;
+                     });
+                 })  
+
+                T.get('followers/ids', function(err, data, response) {
+                    ids = data.ids
+                    ids.forEach(function (element, index) {
+                    T.get('users/lookup', { user_id: element }, function(err, data, response) {
+                        user.twitter.followers.name = data[0].name
+                        user.twitter.followers.username = data[0].screen_name
+                        }) 
+                    });
+                }) 
+
+
+                T.get('friends/ids', function(err, data, response) {
+                    ids = data.ids
+                    ids.forEach(function (element, index) {
+                    T.get('users/lookup', { user_id: element }, function(err, data, response) {
+                        user.twitter.friends.name = data[0].name
+                        user.twitter.friends.username = data[0].screen_name
+                        }) 
+                    });
+                }) 
 
                 user.save(function(err) {
                     if (err)
