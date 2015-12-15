@@ -29,9 +29,8 @@ var userSchema = mongoose.Schema({
         displayName  : String,
         username     : String,
         likes        : {user:  String , text:  String},
-        followers    : [String],
-        friends      : [String], 
-        tweetsAbout  : [String], 
+        followers    : {name: String, username: String },
+        friends      : {name: String, username: String },
         tweets       : [String]
 
     },

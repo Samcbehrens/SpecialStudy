@@ -137,7 +137,7 @@ module.exports = function(passport) {
     },
     function(req, token, refreshToken, profile, done) {
 
-        console.log(profile._json.likes)
+       
         // asynchronous
         process.nextTick(function() {
            
@@ -336,12 +336,12 @@ module.exports = function(passport) {
             if (!req.user) {
 
                 User.findOne({ 'twitter.id' : profile.id }, function(err, user) {
-                    // var T = new Twit({
-                    //         consumer_key:         configAuth.twitterAuth.consumerKey
-                    //       , consumer_secret:      configAuth.twitterAuth.consumerSecret
-                    //       , access_token:         token
-                    //       , access_token_secret:  tokenSecret
-                    //     })
+                    var T = new Twit({
+                            consumer_key:         configAuth.twitterAuth.consumerKey
+                          , consumer_secret:      configAuth.twitterAuth.consumerSecret
+                          , access_token:         token
+                          , access_token_secret:  tokenSecret
+                        });
 
                     // T.get('followers/ids', function(err, data, response) {
                     //     console.log('test',data)
@@ -349,7 +349,12 @@ module.exports = function(passport) {
                     //     T.get('users/lookup?user_id='+data.ids[0],function(err, data, response){
                     //         console.log(data)
                     //     })
-                    // })  
+                    // }) 
+
+
+                   T.get('statuses/user_timeline', function(err, data, response) {
+                        console.log('test',data)
+                    })  
 
                     if (err)
                         return done(err);
@@ -386,10 +391,7 @@ module.exports = function(passport) {
                     }
                 });
 
-            } else {
-                  T.get('favorites/list', function(err, data, response) {
-                        console.log('test',data)
-                    })  
+            } else { 
                 // user already exists and is logged in, we have to link accounts
                 var user                 = req.user; // pull the user out of the session
 
