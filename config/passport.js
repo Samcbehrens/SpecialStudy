@@ -139,12 +139,7 @@ module.exports = function(passport) {
 
         // asynchronous
         process.nextTick(function() {
-           // console.log(profile)
-            //console.log(profile._json)
-            // check if the user is already logged in
-                var movies = profile._json.movies.data[0];
-                console.log(profile._json.movies.data[0].name);
-
+           
             if (!req.user) {
 
                 User.findOne({ 'facebook.id' : profile.id }, function(err, user) {
@@ -158,9 +153,50 @@ module.exports = function(passport) {
                             user.facebook.token = token;
                             user.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
                             user.facebook.email = profile.emails[0].value;
-
                             user.facebook.movies= profile._json.movies.data[0].name;
-               
+                            user.facebook.friends = profile._json.movies.data[0].name;
+                         
+            
+                        
+                        var movieCollection = profile._json.movies.data
+                        
+                        movieCollection.forEach(function (element, index) {
+                            // user.facebook.movies.push(element.name);
+                            console.log(element.name)
+                           
+                        });
+
+                        var likeCollection = profile._json.likes.data
+                   
+                        likeCollection.forEach(function (element, index) {
+                            // user.facebook.likes.push(element.name);
+                            console.log(element.name)
+                           
+                        });
+
+                        var postsCollection = profile._json.posts.data
+         
+                        postsCollection.forEach(function (element, index) {
+                            //user.facebook.posts.push(element.name);
+                            console.log(element.name)
+                           
+                        });
+
+                        var musicCollection = profile._json.music.data
+                     
+                        musicCollection.forEach(function (element, index) {
+                            user.facebook.music.push(element.name);
+                            console.log(element.name)
+                           
+                        });
+
+                        var bookCollection = profile._json.music.data
+                     
+                        bookCollection.forEach(function (element, index) {
+                            // user.facebook.books.push(element.name);
+                            console.log(element.name)
+                        });
+
 
                             user.save(function(err) {
                                 if (err)
@@ -177,7 +213,48 @@ module.exports = function(passport) {
                         newUser.facebook.token = token;
                         newUser.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
                         newUser.facebook.email = profile.emails[0].value;
-                        newUser.facebook.movies= profile._json.movies.data[0].name;
+                        newUser.facebook.movies = profile._json.movies.data[0].name;
+                        newUser.facebook.friends = profile._json.movies.data[0].name;
+                     
+                        var movieCollection = profile._json.movies.data
+               
+                        movieCollection.forEach(function (element, index) {
+                            // user.facebook.movies.push(element.name);
+                            console.log(element.name)
+                           
+                        });
+
+                        var likeCollection = profile._json.likes.data
+                 
+                        likeCollection.forEach(function (element, index) {
+                            // user.facebook.likes.push(element.name);
+                            console.log(element.name)
+                           
+                        });
+
+                        var postsCollection = profile._json.posts.data
+                       
+                        postsCollection.forEach(function (element, index) {
+                            //user.facebook.posts.push(element.name);
+                            console.log(element.name)
+                           
+                        });
+
+                        var musicCollection = profile._json.music.data
+                       
+                        musicCollection.forEach(function (element, index) {
+                            newUser.facebook.music.push(element.name);
+                            console.log(element.name)
+                           
+                        });
+
+                        var bookCollection = profile._json.music.data
+                        
+                        bookCollection.forEach(function (element, index) {
+                            // user.facebook.books.push(element.name);
+                            console.log(element.name)
+                        });
+
                         newUser.save(function(err) {
                             if (err)
                                 throw err;
@@ -193,7 +270,50 @@ module.exports = function(passport) {
                 user.facebook.token = token;
                 user.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
                 user.facebook.email = profile.emails[0].value;
-                user.facebook.movies= profile._json.movies.data[0].name;
+
+
+
+
+                        var movieCollection = profile._json.movies.data
+                    
+                        movieCollection.forEach(function (element, index) {
+                            // user.facebook.movies.push(element.name);
+                            console.log(element.name)
+                           
+                        });
+
+                        var likeCollection = profile._json.likes.data
+                        
+                        likeCollection.forEach(function (element, index) {
+                            // user.facebook.likes.push(element.name);
+                            console.log(element.name)
+                           
+                        });
+
+                        // var postsCollection = profile._json.posts.data
+                        // postsCollection.forEach(function (element, index) {
+                        // //     user.facebook.posts.push(element.name);
+                        //         console.log(element.name)
+                        //         console.log(element.description)
+                        //         console.log(element.link)
+                           
+                        // });
+
+                        var musicCollection = profile._json.music.data
+                      
+                        musicCollection.forEach(function (element, index) {
+                            user.facebook.music.push(element.name);
+                            console.log(element.name)
+                           
+                        });
+
+                        var bookCollection = profile._json.music.data
+                    
+                        bookCollection.forEach(function (element, index) {
+                            // user.facebook.books.push(element.name);
+                            console.log(element.name)
+                        });
+ 
                 user.save(function(err) {
                     if (err)
                         throw err;
@@ -201,10 +321,9 @@ module.exports = function(passport) {
                 });
 
             }
+
         });
-
     }));
-
     // =========================================================================
     // TWITTER =================================================================
    passport.use(new TwitterStrategy({
@@ -224,16 +343,20 @@ module.exports = function(passport) {
             if (!req.user) {
 
                 User.findOne({ 'twitter.id' : profile.id }, function(err, user) {
-                    var T = new Twit({
-                            consumer_key:         configAuth.twitterAuth.consumerKey
-                          , consumer_secret:      configAuth.twitterAuth.consumerSecret
-                          , access_token:         token
-                          , access_token_secret:  tokenSecret
-                        })
+                    // var T = new Twit({
+                    //         consumer_key:         configAuth.twitterAuth.consumerKey
+                    //       , consumer_secret:      configAuth.twitterAuth.consumerSecret
+                    //       , access_token:         token
+                    //       , access_token_secret:  tokenSecret
+                    //     })
 
-                    T.get('favorites/list', function(err, data, response) {
-                        console.log('test',data)
-                    })  
+                    // T.get('followers/ids', function(err, data, response) {
+                    //     console.log('test',data)
+                    //     console.log(data.ids[0])
+                    //     T.get('users/lookup?user_id='+data.ids[0],function(err, data, response){
+                    //         console.log(data)
+                    //     })
+                    // })  
 
                     if (err)
                         return done(err);
