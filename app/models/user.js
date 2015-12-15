@@ -20,7 +20,8 @@ var userSchema = mongoose.Schema({
         likes        : [String], 
         posts        : {name: String, description: String, link: String}, 
         photos       : [String], 
-        music        : [String]
+        music        : [String],
+        books        : [String]
     },
     twitter          : {
         id           : String,

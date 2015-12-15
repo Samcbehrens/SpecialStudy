@@ -137,6 +137,7 @@ module.exports = function(passport) {
     },
     function(req, token, refreshToken, profile, done) {
 
+        console.log(profile._json.likes)
         // asynchronous
         process.nextTick(function() {
            
@@ -159,31 +160,29 @@ module.exports = function(passport) {
             
                         
                         var movieCollection = profile._json.movies.data
-                        
                         movieCollection.forEach(function (element, index) {
-                            // user.facebook.movies.push(element.name);
+                            user.facebook.movies.push(element.name);
                             console.log(element.name)
                            
                         });
 
                         var likeCollection = profile._json.likes.data
-                   
                         likeCollection.forEach(function (element, index) {
-                            // user.facebook.likes.push(element.name);
+                            user.facebook.likes.push(element.name);
                             console.log(element.name)
                            
                         });
 
                         var postsCollection = profile._json.posts.data
-         
                         postsCollection.forEach(function (element, index) {
-                            //user.facebook.posts.push(element.name);
-                            console.log(element.name)
+                            user.facebook.posts.name = element.name;
+                            user.facebook.posts.description = element.description;
+                            user.facebook.posts.link = element.link;
+                            console.log(element.name);
                            
                         });
 
                         var musicCollection = profile._json.music.data
-                     
                         musicCollection.forEach(function (element, index) {
                             user.facebook.music.push(element.name);
                             console.log(element.name)
@@ -191,9 +190,8 @@ module.exports = function(passport) {
                         });
 
                         var bookCollection = profile._json.music.data
-                     
                         bookCollection.forEach(function (element, index) {
-                            // user.facebook.books.push(element.name);
+                             user.facebook.books.push(element.name);
                             console.log(element.name)
                         });
 
@@ -217,31 +215,29 @@ module.exports = function(passport) {
                         newUser.facebook.friends = profile._json.movies.data[0].name;
                      
                         var movieCollection = profile._json.movies.data
-               
                         movieCollection.forEach(function (element, index) {
-                            // user.facebook.movies.push(element.name);
+                            user.facebook.movies.push(element.name);
                             console.log(element.name)
                            
                         });
 
                         var likeCollection = profile._json.likes.data
-                 
                         likeCollection.forEach(function (element, index) {
-                            // user.facebook.likes.push(element.name);
+                            newUser.facebook.likes.push(element.name);
                             console.log(element.name)
                            
                         });
 
                         var postsCollection = profile._json.posts.data
-                       
                         postsCollection.forEach(function (element, index) {
-                            //user.facebook.posts.push(element.name);
+                            user.facebook.posts.name = element.name;
+                            user.facebook.posts.description = element.description;
+                            user.facebook.posts.link = element.link;
                             console.log(element.name)
                            
                         });
 
                         var musicCollection = profile._json.music.data
-                       
                         musicCollection.forEach(function (element, index) {
                             newUser.facebook.music.push(element.name);
                             console.log(element.name)
@@ -249,9 +245,8 @@ module.exports = function(passport) {
                         });
 
                         var bookCollection = profile._json.music.data
-                        
                         bookCollection.forEach(function (element, index) {
-                            // user.facebook.books.push(element.name);
+                            newUser.facebook.books.push(element.name);
                             console.log(element.name)
                         });
 
@@ -277,7 +272,7 @@ module.exports = function(passport) {
                         var movieCollection = profile._json.movies.data
                     
                         movieCollection.forEach(function (element, index) {
-                            // user.facebook.movies.push(element.name);
+                            user.facebook.movies.push(element.name);
                             console.log(element.name)
                            
                         });
@@ -285,22 +280,20 @@ module.exports = function(passport) {
                         var likeCollection = profile._json.likes.data
                         
                         likeCollection.forEach(function (element, index) {
-                            // user.facebook.likes.push(element.name);
+                            user.facebook.likes.push(element.name);
                             console.log(element.name)
                            
                         });
 
-                        // var postsCollection = profile._json.posts.data
-                        // postsCollection.forEach(function (element, index) {
-                        // //     user.facebook.posts.push(element.name);
-                        //         console.log(element.name)
-                        //         console.log(element.description)
-                        //         console.log(element.link)
+                        var postsCollection = profile._json.posts.data
+                        postsCollection.forEach(function (element, index) {
+                            user.facebook.posts.name = element.name;
+                            user.facebook.posts.description = element.description;
+                            user.facebook.posts.link = element.link;
                            
-                        // });
+                        });
 
                         var musicCollection = profile._json.music.data
-                      
                         musicCollection.forEach(function (element, index) {
                             user.facebook.music.push(element.name);
                             console.log(element.name)
@@ -310,7 +303,7 @@ module.exports = function(passport) {
                         var bookCollection = profile._json.music.data
                     
                         bookCollection.forEach(function (element, index) {
-                            // user.facebook.books.push(element.name);
+                            user.facebook.books.push(element.name);
                             console.log(element.name)
                         });
  
