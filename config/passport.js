@@ -4,7 +4,7 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 var TwitterStrategy  = require('passport-twitter').Strategy;
 var GoogleStrategy   = require('passport-google-oauth').OAuth2Strategy;
 var InstagramStrategy  = require('passport-instagram').Strategy;
-
+var Twit = require('twit');
 
 // load up the user model
 var User       = require('../app/models/user');
@@ -207,8 +207,7 @@ module.exports = function(passport) {
 
     // =========================================================================
     // TWITTER =================================================================
-    // =========================================================================
-    passport.use(new TwitterStrategy({
+   passport.use(new TwitterStrategy({
 
         consumerKey     : configAuth.twitterAuth.consumerKey,
         consumerSecret  : configAuth.twitterAuth.consumerSecret,
@@ -217,14 +216,25 @@ module.exports = function(passport) {
 
     },
     function(req, token, tokenSecret, profile, done) {
-
+        console.log(profile)
         // asynchronous
         process.nextTick(function() {
-
+     
             // check if the user is already logged in
             if (!req.user) {
 
                 User.findOne({ 'twitter.id' : profile.id }, function(err, user) {
+                    var T = new Twit({
+                            consumer_key:         configAuth.twitterAuth.consumerKey
+                          , consumer_secret:      configAuth.twitterAuth.consumerSecret
+                          , access_token:         token
+                          , access_token_secret:  tokenSecret
+                        })
+
+                    T.get('favorites/list', function(err, data, response) {
+                        console.log('test',data)
+                    })  
+
                     if (err)
                         return done(err);
 
@@ -261,6 +271,9 @@ module.exports = function(passport) {
                 });
 
             } else {
+                  T.get('favorites/list', function(err, data, response) {
+                        console.log('test',data)
+                    })  
                 // user already exists and is logged in, we have to link accounts
                 var user                 = req.user; // pull the user out of the session
 
